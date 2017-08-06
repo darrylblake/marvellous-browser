@@ -52,8 +52,7 @@ function Creators(props) {
           return (
             <Link key={creator.id}
                   to={`/creators/${creator.id}`}
-                  className="comic__characters__wrapper__character"
-                  onClick={e => e.preventDefault()}>
+                  className="comic__characters__wrapper__character">
               <img src={creator.thumbnail}/>
               <h3>{creator.suffix && `(${creator.suffix})`} {creator.fullName}</h3>
             </Link>
