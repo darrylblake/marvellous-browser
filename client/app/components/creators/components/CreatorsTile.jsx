@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import './CreatorsTile.pcss'
 import {Link} from 'react-router'
 import classNames from 'classnames'
@@ -13,7 +14,7 @@ const styleForCreator = ifElse(
   (creator) => assoc('backgroundColor', getColourForKey(`creator-${prop('id', creator)}`), {})
 )
 
-export default function ComicTile(props) {
+function CreatorsTile(props) {
   const creator = props.creator
 
   const comicClass = classNames({
@@ -24,8 +25,7 @@ export default function ComicTile(props) {
   return (
     <Link to={`/creators/${creator.id}`}
           className={comicClass}
-          style={styleForCreator(creator)}
-          onClick={e => e.preventDefault()}>
+          style={styleForCreator(creator)}>
       <img src={creator.thumbnail}/>
       <div className="creator-tile__detail">
         <h3>{creator.suffix && `(${creator.suffix})`} {creator.fullName}</h3>
@@ -34,3 +34,14 @@ export default function ComicTile(props) {
   )
 }
 
+CreatorsTile.propTypes = {
+  hasImages: PropTypes.bool.isRequired,
+  thumbnail: PropTypes.string.isRequired,
+  creator: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    fullName: PropTypes.string,
+    suffix: PropTypes.string,
+  }),
+}
+
+export default CreatorsTile
