@@ -18,7 +18,7 @@ const getPathname = pathOr('', ['routing', 'locationBeforeTransitions', 'pathnam
 const isOnDetailsPage = () => {
   return any((path) => {
     return (new RegExp(`^${path}/\\d+`)).test(window.location.pathname)
-  }, ['/comics', '/characters'])
+  }, ['/comics', '/characters', '/creators'])
 }
 
 function Toolbar(props) {
