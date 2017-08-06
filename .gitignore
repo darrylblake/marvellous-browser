@@ -65,3 +65,4 @@ client/public/build
 .DS_Store
 client/public/index.html
 deployment.zip
+.vscode
