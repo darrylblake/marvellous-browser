@@ -14,6 +14,9 @@ module.exports = {
     chunkFilename: 'build/[id].[chunkhash:8].chunk.js'
   },
   resolve: {
+    alias:{
+      'whatwg-fetch': path.resolve(__dirname, './app/helpers/polyfillFetch.js')
+    },
     extensions: ['.js', '.jsx']
   },
   module: {
