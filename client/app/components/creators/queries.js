@@ -32,7 +32,9 @@ export const CREATORS_DETAILS_QUERY = gql`query (
       hasImages
       comicsTotal
       comics {
-        id
+        id,
+        thumbnail,
+        hasImages
       }
     }
   }
