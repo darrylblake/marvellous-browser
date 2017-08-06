@@ -3,7 +3,7 @@
 set -e
 set -x
 
-export NODE_ENV="production"
+export NODE_ENV="development"
 export PORT=3000
 
 cd server
