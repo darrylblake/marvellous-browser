@@ -19,7 +19,8 @@ function CreatorsTile(props) {
 
   const comicClass = classNames({
     'creator-tile': true,
-    'creator-tile--no-images': !creator.hasImages
+    'creator-tile--no-images': !creator.hasImages,
+    'creator-tile--large': props.large,
   })
 
   return (
