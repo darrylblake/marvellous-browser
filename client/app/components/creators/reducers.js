@@ -12,7 +12,8 @@ import {
 // eslint-disable-next-line no-undef
 const params = new URLSearchParams(location.search.slice(1));
 const initialState = {
-  data: [],
+  data: {},
+  list: [],
   orderBy: params.get('orderBy') || CREATORS_ORDER_FIRSTNAME_ASC,
   nameStartsWith: params.get('nameStartsWith') || '',
   limit: params.get('limit') || 12,
@@ -21,21 +22,33 @@ const initialState = {
 
 const getCreatorsFromResponse = pathOr([], ['payload', 'data', 'creators'])
 
+const loadCreators = (state, action) => {
+  const list = [...state.list]
+  const creatorsPayload = getCreatorsFromResponse(action);
+  const data = Object.assign({}, state.data, creatorsPayload.reduce((data, creator) => {
+    if (!state.data[creator.id]) {
+      list.push(creator.id)
+    }
+    data[creator.id] = creator
+    return data
+  }, {}));
+
+  return Object.assign({}, state, {
+    data,
+    list
+  })
+}
+
 export function creators (
   state = initialState,
   action
 ) {
   switch (action.type) {
-
     case CREATORS_LOAD_FULFILLED:
-      return Object.assign({}, state, {
-        data: getCreatorsFromResponse(action)
-      })
+      return loadCreators(state, action)
 
     case CREATORS_LOAD_MORE_FULFILLED:
-      return Object.assign({}, state, {
-        data: [...state.data, ...getCreatorsFromResponse(action)]
-      })
+      return loadCreators(state, action)
 
     case CREATORS_CHANGE_QUERY: {
       return Object.assign({}, state, {

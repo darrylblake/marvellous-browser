@@ -12,7 +12,7 @@ import {
 } from '../../../creators/constants'
 import { toggleToolbarSearch } from '../../actions'
 
-const getNumberOfComics = pathOr(0, ['creators', 'data', 'length'])
+const getNumberOfComics = pathOr(0, ['creators', 'list', 'length'])
 const getOrderBy = path(['creators', 'orderBy'])
 const getNameStartsWith = path(['creators', 'nameStartsWith'])
 
