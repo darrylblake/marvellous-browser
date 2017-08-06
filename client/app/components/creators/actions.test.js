@@ -1,7 +1,6 @@
 import * as actions from './actions'
 import * as constants from './constants'
 import {client} from '../../client'
-import {gql} from 'react-apollo'
 import * as R from 'ramda'
 import {browserHistory} from 'react-router'
 import {objectToQueryParams} from '../../helpers/objectToQueryParams'
