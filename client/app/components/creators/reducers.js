@@ -6,7 +6,9 @@ import {
   CREATORS_LOAD_FULFILLED,
   CREATORS_LOAD_MORE_FULFILLED,
   CREATORS_ORDER_FIRSTNAME_ASC,
-  CREATORS_UPDATE_NAME_STARTS_WITH
+  CREATORS_UPDATE_NAME_STARTS_WITH,
+  CREATORS_DETAILS_SELECT,
+  CREATORS_DETAILS_LOAD_FULFILLED,
 } from './constants'
 
 // eslint-disable-next-line no-undef
@@ -21,12 +23,13 @@ const initialState = {
 }
 
 const getCreatorsFromResponse = pathOr([], ['payload', 'data', 'creators'])
+const getCreatorFromResponse = pathOr({}, ['payload', 'data', 'creator'])
+const getCreatorIdResponse = pathOr(null, ['variables', 'id'])
 
-const loadCreators = (state, action) => {
+const loadCreators = (state, creators) => {
   const list = [...state.list]
-  const creatorsPayload = getCreatorsFromResponse(action);
-  const data = Object.assign({}, state.data, creatorsPayload.reduce((data, creator) => {
-    if (!state.data[creator.id]) {
+  const data = Object.assign({}, state.data, creators.reduce((data, creator) => {
+    if (state.list.indexOf(creator.id) === -1) {
       list.push(creator.id)
     }
     data[creator.id] = creator
@@ -45,11 +48,17 @@ export function creators (
 ) {
   switch (action.type) {
     case CREATORS_LOAD_FULFILLED:
-      return loadCreators(state, action)
+      return loadCreators(state, getCreatorsFromResponse(action))
 
     case CREATORS_LOAD_MORE_FULFILLED:
-      return loadCreators(state, action)
+      return loadCreators(state, getCreatorsFromResponse(action))
 
+    case CREATORS_DETAILS_LOAD_FULFILLED:
+      return loadCreators(state, [getCreatorFromResponse(action)])
+
+    case CREATORS_DETAILS_SELECT:
+      return Object.assign({}, state, { selected: getCreatorIdResponse(action) })
+    
     case CREATORS_CHANGE_QUERY: {
       return Object.assign({}, state, {
         orderBy: propOr(state.orderBy, 'orderBy', action.variables),

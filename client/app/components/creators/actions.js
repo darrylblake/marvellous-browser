@@ -5,13 +5,18 @@
  */
 import {
   CREATORS_CHANGE_QUERY,
+  CREATORS_DETAILS_LOAD,
+  CREATORS_DETAILS_SELECT,
   CREATORS_LOAD,
   CREATORS_LOAD_MORE,
   CREATORS_ORDER_FIRSTNAME_ASC,
   CREATORS_UPDATE_NAME_STARTS_WITH
 } from './constants'
+import {
+  CREATORS_QUERY,
+  CREATORS_DETAILS_QUERY,
+} from './queries'
 import {client} from '../../client'
-import {gql} from 'react-apollo'
 import merge from 'ramda/src/merge'
 import clone from 'ramda/src/clone'
 import compose from 'ramda/src/compose'
@@ -25,27 +30,6 @@ const mergeQueryVariables = compose(merge({
   orderBy: CREATORS_ORDER_FIRSTNAME_ASC
 }), clone)
 
-export const CREATORS_QUERY = gql`query (
-    $start: Int,
-    $limit: Int,
-    $orderBy: String,
-    $nameStartsWith: String
-  ) {
-    creators(
-      start: $start,
-      limit: $limit,
-      orderBy: $orderBy,
-      nameStartsWith: $nameStartsWith
-    ) {
-      id
-      fullName
-      suffix
-      thumbnail
-      hasImages
-    }
-  }
-`
-
 export function loadCreators(queryOptions = {}) {
   return {
     type: CREATORS_LOAD,
@@ -54,6 +38,22 @@ export function loadCreators(queryOptions = {}) {
       variables: queryOptions
     })
   }
+}
+
+export function loadCreatorsDetails(queryOptions = {}) {
+  return [
+    {
+      type: CREATORS_DETAILS_SELECT,
+      variables: queryOptions
+    },
+    {
+      type: CREATORS_DETAILS_LOAD,
+      payload: client.query({
+        query: CREATORS_DETAILS_QUERY,
+        variables: queryOptions
+      })
+    }
+  ]
 }
 
 export function loadMoreCreators(query) {
